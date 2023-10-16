@@ -1,0 +1,2 @@
+# grpc_deeplearning_demo
+个人练习demo，使用grpc实现深度学习服务器和客户端之间的数据传输

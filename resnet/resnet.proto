@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package resnet;
+
+message Image {
+  bytes image_data = 1; // 用于存储图像的二进制数据，例如JPEG或PNG格式
+}
+
+message ClassificationResult {
+  string class_name = 1;  // 分类的类名
+  float probability = 2;  // 该类的概率
+}
+
+service ResNetService {
+  rpc ClassifyImage(Image) returns (ClassificationResult); // 图像分类的RPC接口
+}

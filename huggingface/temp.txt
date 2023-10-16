@@ -1,0 +1,36 @@
+import grpc
+import resnet_pb2
+import resnet_pb2_grpc
+
+def load_image_as_bytes(image_path):
+    with open(image_path, "rb") as f:
+        return f.read()
+
+def run():
+    with grpc.insecure_channel('localhost:50051') as channel:
+        stub = resnet_pb2_grpc.ResNetServiceStub(channel)
+        image_data = load_image_as_bytes("cat.jpg")  # 请确保这个路径指向你的cat.jpg文件
+        response = stub.ClassifyImage(resnet_pb2.Image(image_data=image_data))
+        print(f"Class: {response.class_name}, Probability: {response.probability}")
+
+if __name__ == '__main__':
+    run()
+from PIL import Image
+from io import BytesIO
+import torchvision.transforms as transforms
+
+def preprocess_image(image_data):
+    """从二进制数据预处理图像"""
+    input_image = Image.open(BytesIO(image_data))
+    preprocess = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+    input_tensor = preprocess(input_image)
+    return input_tensor.unsqueeze(0)
+
+# 示例
+# image_data = load_image_as_bytes("cat.jpg")  # 使用你自己的函数加载图像二进制数据
+# processed_image = preprocess_image(image_data)

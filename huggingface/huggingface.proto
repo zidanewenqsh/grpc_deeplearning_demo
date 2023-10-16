@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package huggingface;
+
+service TextService {
+  rpc ClassifyText (TextRequest) returns (Classification);
+  rpc GenerateText (TextRequest) returns (Text);
+  rpc NamedEntityRecognition (TextRequest) returns (Entities);
+  rpc TranslateText (TranslationRequest) returns (Text);
+  rpc SentimentAnalysis (TextRequest) returns (Classification);
+  rpc SummarizeText (TextRequest) returns (Text);
+}
+
+message TextRequest {
+  string text = 1;
+}
+
+message TranslationRequest {
+  string text = 1;
+  string target_language = 2;
+}
+
+message Classification {
+  string label = 1;
+  float score = 2;
+}
+
+message Text {
+  string text = 1;
+}
+
+message Entities {
+  repeated string entities = 1;
+}

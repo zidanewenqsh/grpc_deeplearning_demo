@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package yolov5;
+
+message Image {
+  bytes image_data = 1;  // 图像数据，可以是JPEG、PNG等格式的二进制数据
+}
+
+message Detection {
+  float x = 1;  // x坐标
+  float y = 2;  // y坐标
+  float width = 3;  // 宽度
+  float height = 4;  // 高度
+  float confidence = 5;  // 置信度
+  string class_name = 6;  // 类名
+}
+
+message Detections {
+  repeated Detection detections = 1;  // 检测结果数组
+}
+
+service YoloV5Service {
+  rpc DetectObject(Image) returns (Detections);  // 检测接口
+}
